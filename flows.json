@@ -1,0 +1,486 @@
+[
+    {
+        "id": "fc7a4ff7932f38c7",
+        "type": "tab",
+        "label": "Fluxo 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "4d5bd07a566737d2",
+        "type": "mysql",
+        "z": "fc7a4ff7932f38c7",
+        "mydb": "92a180fa72d801ee",
+        "name": "db aula",
+        "x": 680,
+        "y": 660,
+        "wires": [
+            [
+                "cc19cd3515c41ff5"
+            ]
+        ]
+    },
+    {
+        "id": "170bf45a82964009",
+        "type": "http response",
+        "z": "fc7a4ff7932f38c7",
+        "name": "resposta",
+        "statusCode": "",
+        "headers": {},
+        "x": 720,
+        "y": 760,
+        "wires": []
+    },
+    {
+        "id": "e455cde9d7775b53",
+        "type": "function",
+        "z": "fc7a4ff7932f38c7",
+        "name": "function 2",
+        "func": " const data = JSON.parse(msg.payload)\n\nglobal.set(data.sensor, data.valor);\n\nmsg.payload = data\nreturn msg",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 620,
+        "wires": [
+            [
+                "c6b9aba57911a3f9",
+                "cf7799c0e8d69eeb"
+            ]
+        ]
+    },
+    {
+        "id": "f5a72a397f0d0fd4",
+        "type": "serial in",
+        "z": "fc7a4ff7932f38c7",
+        "name": "sensor",
+        "serial": "ccb319d5acfa5134",
+        "x": 70,
+        "y": 620,
+        "wires": [
+            [
+                "e455cde9d7775b53"
+            ]
+        ]
+    },
+    {
+        "id": "cc19cd3515c41ff5",
+        "type": "debug",
+        "z": "fc7a4ff7932f38c7",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1000,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "cf7799c0e8d69eeb",
+        "type": "function",
+        "z": "fc7a4ff7932f38c7",
+        "name": "function 3",
+        "func": "const query = 'INSERT INTO leituras_sensores (tipo, valor) VALUES (?, ?)'\nconst valor = msg.payload.valor\nconst tipo = msg.payload.sensor\nconst data = [tipo, valor]\n\n\nmsg.topic = query\nmsg.payload = data\n\nreturn msg\n\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 520,
+        "y": 680,
+        "wires": [
+            [
+                "4d5bd07a566737d2"
+            ]
+        ]
+    },
+    {
+        "id": "1ea4a349578d797b",
+        "type": "ui_text",
+        "z": "fc7a4ff7932f38c7",
+        "group": "7a419f0419e8d4a5",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "temperatura",
+        "format": "{{msg.payload.temperatura}}",
+        "layout": "col-center",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 890,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "c6b9aba57911a3f9",
+        "type": "function",
+        "z": "fc7a4ff7932f38c7",
+        "name": "function 4",
+        "func": "const tipo = msg.payload.sensor\n\nmsg.payload ={\n    'umidade': global.get('umidade'),\n    'luminosidade': global.get('luminosidade'),\n    'temperatura': global.get('temperatura'),\n    \n};\n\n\nreturn msg\n\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 220,
+        "wires": [
+            [
+                "1ea4a349578d797b",
+                "bce1102b29e18cc9",
+                "4b623d7d9797b6f7",
+                "beacf9ba99451e7c",
+                "6232f347014ec5c4",
+                "87b9e4fb0c65cbe7"
+            ]
+        ]
+    },
+    {
+        "id": "bce1102b29e18cc9",
+        "type": "ui_text",
+        "z": "fc7a4ff7932f38c7",
+        "group": "7a419f0419e8d4a5",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "luminosidade",
+        "format": "{{msg.payload.luminosidade}}",
+        "layout": "col-center",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 910,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "4b623d7d9797b6f7",
+        "type": "ui_text",
+        "z": "fc7a4ff7932f38c7",
+        "group": "7a419f0419e8d4a5",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "umidade",
+        "format": "{{msg.payload.umidade}}",
+        "layout": "col-center",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 980,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "3c94ac4df6377e2d",
+        "type": "function",
+        "z": "fc7a4ff7932f38c7",
+        "name": "function 1",
+        "func": "const query = 'select * from leituras_sensores'\n\nmsg.topic = query\n\nreturn msg\n\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 260,
+        "y": 820,
+        "wires": [
+            [
+                "d50d47fba52c3c67"
+            ]
+        ]
+    },
+    {
+        "id": "625fe2ed5db5d097",
+        "type": "ui_chart",
+        "z": "fc7a4ff7932f38c7",
+        "name": "",
+        "group": "7a419f0419e8d4a5",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "label": "LUMINOSIDADE",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 830,
+        "y": 480,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "beacf9ba99451e7c",
+        "type": "function",
+        "z": "fc7a4ff7932f38c7",
+        "name": "function 5",
+        "func": "const tipo = msg.payload.sensor\n\nmsg.payload =global.get('luminosidade')\n\nreturn msg\n\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 560,
+        "y": 480,
+        "wires": [
+            [
+                "625fe2ed5db5d097"
+            ]
+        ]
+    },
+    {
+        "id": "4b138174dfc29245",
+        "type": "ui_chart",
+        "z": "fc7a4ff7932f38c7",
+        "name": "",
+        "group": "7a419f0419e8d4a5",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "label": "TEMPERATURA",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 750,
+        "y": 560,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "6232f347014ec5c4",
+        "type": "function",
+        "z": "fc7a4ff7932f38c7",
+        "name": "function 6",
+        "func": "const tipo = msg.payload.sensor\n\nmsg.payload =global.get('temperatura')\n\nreturn msg\n\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 500,
+        "y": 560,
+        "wires": [
+            [
+                "4b138174dfc29245"
+            ]
+        ]
+    },
+    {
+        "id": "b7f622ffbfc4f713",
+        "type": "ui_chart",
+        "z": "fc7a4ff7932f38c7",
+        "name": "",
+        "group": "7a419f0419e8d4a5",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "label": "UMIDADE",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 790,
+        "y": 360,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "87b9e4fb0c65cbe7",
+        "type": "function",
+        "z": "fc7a4ff7932f38c7",
+        "name": "function 7",
+        "func": "const tipo = msg.payload.sensor\n\nmsg.payload = global.get('umidade')\n\nreturn msg\n\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 580,
+        "y": 360,
+        "wires": [
+            [
+                "b7f622ffbfc4f713"
+            ]
+        ]
+    },
+    {
+        "id": "84409a8a770cc710",
+        "type": "http in",
+        "z": "fc7a4ff7932f38c7",
+        "name": "",
+        "url": "/get-data",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 110,
+        "y": 740,
+        "wires": [
+            [
+                "3c94ac4df6377e2d"
+            ]
+        ]
+    },
+    {
+        "id": "d50d47fba52c3c67",
+        "type": "mysql",
+        "z": "fc7a4ff7932f38c7",
+        "mydb": "92a180fa72d801ee",
+        "name": "db aula",
+        "x": 480,
+        "y": 760,
+        "wires": [
+            [
+                "170bf45a82964009"
+            ]
+        ]
+    },
+    {
+        "id": "92a180fa72d801ee",
+        "type": "MySQLdatabase",
+        "name": "db",
+        "host": "127.0.0.1",
+        "port": "3306",
+        "db": "sensoratv",
+        "tz": "",
+        "charset": "UTF8"
+    },
+    {
+        "id": "ccb319d5acfa5134",
+        "type": "serial-port",
+        "name": "COM5",
+        "serialport": "COM5",
+        "serialbaud": "9600",
+        "databits": 8,
+        "parity": "none",
+        "stopbits": 1,
+        "waitfor": "",
+        "dtr": "none",
+        "rts": "none",
+        "cts": "none",
+        "dsr": "none",
+        "newline": "\\n",
+        "bin": "false",
+        "out": "char",
+        "addchar": "",
+        "responsetimeout": 10000
+    },
+    {
+        "id": "7a419f0419e8d4a5",
+        "type": "ui_group",
+        "name": "Default",
+        "tab": "0d324c377d816845",
+        "order": 1,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "0d324c377d816845",
+        "type": "ui_tab",
+        "name": "Home",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    }
+]
